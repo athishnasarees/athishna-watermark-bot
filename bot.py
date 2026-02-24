@@ -10,7 +10,7 @@ from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTyp
 # ============================
 WATERMARK_TEXT = "Athishna Sarees"
 WATERMARK_OPACITY = 140         # Transparenz
-FONT_SIZE_RATIO = 20          # Schriftgröße relativ zur Bildbreite
+FONT_SIZE_RATIO = 0.11          # Schriftgröße relativ zur Bildbreite
 TEXT_COLOR = (80, 60, 60)       # Dunkelgrau/Braun wie im Beispiel
 # ============================
 
@@ -23,14 +23,22 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN", "DEIN_TOKEN_HIER")
 def add_watermark(image_bytes: bytes) -> bytes:
     """Fügt ein elegantes, mittig platziertes Wasserzeichen hinzu."""
     img = Image.open(io.BytesIO(image_bytes)).convert("RGBA")
+    
+    # Bild auf mindestens 1500px Breite hochskalieren damit Wasserzeichen groß genug ist
+    min_width = 1500
+    if img.width < min_width:
+        scale = min_width / img.width
+        new_size = (int(img.width * scale), int(img.height * scale))
+        img = img.resize(new_size, Image.LANCZOS)
+    
     width, height = img.size
 
     # Transparente Schicht für das Wasserzeichen
     watermark_layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(watermark_layer)
 
-    # Schriftgröße dynamisch je nach Bildbreite
-    font_size = int(width * FONT_SIZE_RATIO)
+    # Schriftgröße basierend auf der kleinsten Seite damit es immer groß genug ist
+    font_size = int(min(width, height) * 0.12)
 
     # Versuche eine elegante Schriftart zu laden, sonst Standard
     try:
