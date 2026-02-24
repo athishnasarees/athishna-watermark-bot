@@ -9,8 +9,8 @@ from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTyp
 # EINSTELLUNGEN - Hier anpassen
 # ============================
 WATERMARK_TEXT = "Athishna Sarees"
-WATERMARK_OPACITY = 80          # 0 = unsichtbar, 255 = komplett sichtbar (empfohlen: 60-100)
-FONT_SIZE_RATIO = 0.08          # Schriftgröße relativ zur Bildbreite
+WATERMARK_OPACITY = 140          # 0 = unsichtbar, 255 = komplett sichtbar (empfohlen: 60-100)
+FONT_SIZE_RATIO = 0.13          # Schriftgröße relativ zur Bildbreite
 TEXT_COLOR = (255, 255, 255)    # Weiß
 # ============================
 
