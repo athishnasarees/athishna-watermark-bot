@@ -10,7 +10,7 @@ from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTyp
 # ============================
 WATERMARK_TEXT = "Athishna Sarees"
 WATERMARK_OPACITY = 140         # Transparenz
-FONT_SIZE_RATIO = 0.75          # Schriftgröße relativ zur Bildbreite
+FONT_SIZE_RATIO = 0.11          # Schriftgröße relativ zur Bildbreite
 TEXT_COLOR = (80, 60, 60)       # Dunkelgrau/Braun wie im Beispiel
 # ============================
 
@@ -37,19 +37,28 @@ def add_watermark(image_bytes: bytes) -> bytes:
     watermark_layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(watermark_layer)
 
-    # Schriftgröße basierend auf der kleinsten Seite damit es immer groß genug ist
-    font_size = 300
-
-    # Versuche eine elegante Schriftart zu laden, sonst Standard
-    try:
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf", font_size)
-    except:
+    # Schriftart laden
+    def load_font(size):
         try:
-            font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/LiberationSerif-BoldItalic.ttf", font_size)
+            return ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-BoldItalic.ttf", size)
         except:
-            font = ImageFont.load_default()
+            try:
+                return ImageFont.truetype("/usr/share/fonts/truetype/liberation/LiberationSerif-BoldItalic.ttf", size)
+            except:
+                return ImageFont.load_default()
 
-    # Text-Größe berechnen für zentrierte Platzierung
+    # Schriftgröße automatisch so anpassen dass Text 65% der Bildbreite füllt
+    target_width = width * 0.65
+    font_size = 10
+    font = load_font(font_size)
+    while True:
+        bbox = draw.textbbox((0, 0), WATERMARK_TEXT, font=font)
+        text_width = bbox[2] - bbox[0]
+        if text_width >= target_width:
+            break
+        font_size += 5
+        font = load_font(font_size)
+
     bbox = draw.textbbox((0, 0), WATERMARK_TEXT, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
