@@ -38,7 +38,7 @@ def add_watermark(image_bytes: bytes) -> bytes:
     draw = ImageDraw.Draw(watermark_layer)
 
     # Schriftgröße basierend auf der kleinsten Seite damit es immer groß genug ist
-    font_size = int(min(width, height) * 0.12)
+    font_size = 120
 
     # Versuche eine elegante Schriftart zu laden, sonst Standard
     try:
