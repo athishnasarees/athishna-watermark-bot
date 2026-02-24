@@ -9,9 +9,9 @@ from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTyp
 # EINSTELLUNGEN - Hier anpassen
 # ============================
 WATERMARK_TEXT = "Athishna Sarees"
-WATERMARK_OPACITY = 1000          # 0 = unsichtbar, 255 = komplett sichtbar (empfohlen: 60-100)
-FONT_SIZE_RATIO = 20          # Schriftgröße relativ zur Bildbreite
-TEXT_COLOR = (255, 255, 255)    # Weiß
+WATERMARK_OPACITY = 140         # Transparenz
+FONT_SIZE_RATIO = 0.11          # Schriftgröße relativ zur Bildbreite
+TEXT_COLOR = (80, 60, 60)       # Dunkelgrau/Braun wie im Beispiel
 # ============================
 
 logging.basicConfig(level=logging.INFO)
@@ -29,7 +29,7 @@ def add_watermark(image_bytes: bytes) -> bytes:
     watermark_layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(watermark_layer)
 
-    # Schriftgröße dynamisch je nach Bildgröße
+    # Schriftgröße dynamisch je nach Bildbreite
     font_size = int(width * FONT_SIZE_RATIO)
 
     # Versuche eine elegante Schriftart zu laden, sonst Standard
@@ -46,19 +46,10 @@ def add_watermark(image_bytes: bytes) -> bytes:
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
 
-    x = (width - text_width) / 10
-    y = (height - text_height) / 10
+    x = (width - text_width) / 2
+    y = (height - text_height) / 2
 
-    # Schatten für bessere Lesbarkeit
-    shadow_offset = 2
-    draw.text(
-        (x + shadow_offset, y + shadow_offset),
-        WATERMARK_TEXT,
-        font=font,
-        fill=(0, 0, 15)
-    )
-
-    # Haupttext
+    # Kein Schatten - nur sauberer Text wie im Beispielbild
     draw.text(
         (x, y),
         WATERMARK_TEXT,
