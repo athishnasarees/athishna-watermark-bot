@@ -9,8 +9,8 @@ from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTyp
 # EINSTELLUNGEN - Hier anpassen
 # ============================
 WATERMARK_TEXT = "Athishna Sarees"
-WATERMARK_OPACITY = 260          # 0 = unsichtbar, 255 = komplett sichtbar (empfohlen: 60-100)
-FONT_SIZE_RATIO = 0.25          # Schriftgröße relativ zur Bildbreite
+WATERMARK_OPACITY = 400          # 0 = unsichtbar, 255 = komplett sichtbar (empfohlen: 60-100)
+FONT_SIZE_RATIO = 0.37          # Schriftgröße relativ zur Bildbreite
 TEXT_COLOR = (255, 255, 255)    # Weiß
 # ============================
 
@@ -50,12 +50,12 @@ def add_watermark(image_bytes: bytes) -> bytes:
     y = (height - text_height) / 2
 
     # Schatten für bessere Lesbarkeit
-    shadow_offset = max(2, font_size // 30)
+    shadow_offset = 2
     draw.text(
         (x + shadow_offset, y + shadow_offset),
         WATERMARK_TEXT,
         font=font,
-        fill=(0, 0, 30, WATERMARK_OPACITY // 2)
+        fill=(0, 0, 15)
     )
 
     # Haupttext
