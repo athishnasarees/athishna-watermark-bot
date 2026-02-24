@@ -46,8 +46,8 @@ def add_watermark(image_bytes: bytes) -> bytes:
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
 
-    x = (width - text_width) / 2
-    y = (height - text_height) / 2
+    x = (width - text_width) / 10
+    y = (height - text_height) / 10
 
     # Schatten für bessere Lesbarkeit
     shadow_offset = 2
